@@ -1,9 +1,10 @@
 const express = require("express");
 const router = express.Router();
+const auth = require("../middleware/auth");
 
 const Clima = require("../model/proyecto");
 
-router.get('/', (req, res, next) => {
+router.get('/',auth, (req, res) => {
     climaQuery = Clima.find()
     climaQuery.then(clima => {
         try {
@@ -25,7 +26,7 @@ router.get('/', (req, res, next) => {
     });
 });
 
-router.get('/ByState/:nes', (req, res, next) => {
+router.get('/ByState/:nes',auth, (req, res) => {
     climaQuery = Clima.find( {nes : req.params.nes})
     climaQuery.then(clima => {
         try {
@@ -47,7 +48,7 @@ router.get('/ByState/:nes', (req, res, next) => {
     });
 });
 
-router.get("/ByCity/:nmun", (req, res, next) => {
+router.get("/ByCity/:nmun",auth, (req, res) => {
     Clima.findOne({ nmun: req.params.nmun }).then(clima => {
         try {
             res.status(201).json({
@@ -68,7 +69,7 @@ router.get("/ByCity/:nmun", (req, res, next) => {
     });
 });
 
-router.get('/:nes/:nmun', (req, res, next) => {
+router.get('/:nes/:nmun',auth, (req, res) => {
     Clima.find( {nmun: req.params.nmun , nes: req.params.nes} ).then(clima => {
         try {
             res.status(200).json({
@@ -89,7 +90,7 @@ router.get('/:nes/:nmun', (req, res, next) => {
     });
 });
 
-router.post('/crear', (req, res, next) => {
+router.post('/crear',auth, (req, res) => {
     const clima = new Clima({
         nes: req.body.nes,
         nmun: req.body.nmun,
